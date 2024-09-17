@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_clonex/pages/home_page/home_screen.dart';
 import 'package:twitter_clonex/pages/message_page/message_screen.dart';
@@ -7,8 +8,8 @@ import 'package:twitter_clonex/pages/search_page/search_screen.dart';
 
 
 class MobileLayout extends StatefulWidget {
-  const MobileLayout({super.key});
-
+  const MobileLayout({super.key, required this.user});
+  final User user;
   @override
   State<MobileLayout> createState() => _MobileLayoutState();
 }
@@ -25,28 +26,29 @@ class _MobileLayoutState extends State<MobileLayout> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+             DrawerHeader(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
              
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       backgroundImage: AssetImage(""),
                     ),
                     Text(
-                      "ugur",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                      widget.user.uid ,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    Text("@ugur343434",
-                        style: TextStyle(
+                    Text(widget.user.email ?? "Email bilgisi yok",
+                        style: const TextStyle(
                           color: Color.fromARGB(255, 96, 96, 96),
                           fontSize: 14,
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
-                    Text("0 Takip edilen    0 Takipçi",
+                    const Text("0 Takip edilen    0 Takipçi",
                         style: TextStyle(
                           color: Color.fromARGB(255, 96, 96, 96),
                           fontSize: 14,

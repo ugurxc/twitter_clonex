@@ -60,10 +60,14 @@ class AuthService {
       try{
               final UserCredential userCredential=   await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.user!=null) {
-        navigator.push(MaterialPageRoute(builder: (context) => const MobileLayout(),));
+        navigator.push(
+        MaterialPageRoute(
+          builder: (context) => MobileLayout(user: userCredential.user!),  // Kullanıcıyı buraya gönderiyoruz
+        ),
+      );
         
       }
-      else{log("ayıp yav");}
+      else{log("problem");}
       } catch(e){
         log(e.toString());
       }
