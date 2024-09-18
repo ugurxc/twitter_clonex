@@ -18,7 +18,7 @@ class AuthService {
       return userCredential.user;
   }
 } */
-import 'dart:developer';
+/* import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -103,4 +103,4 @@ class AuthService {
     
 
   
-}
+} */

@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
 }
  */
 
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User? user =ModalRoute.of(context)!.settings.arguments as User?;
+    //final User? user =ModalRoute.of(context)!.settings.arguments as User?;
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight), // AppBar yüksekliği
@@ -80,17 +80,17 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        body:  Column(
+        body:  const Column(
           children: [
             
-            const Spacer(flex: 5,),
-            const Center(child: Text("Takip edilenler")),
-            const Divider(),
-            const Spacer(flex: 5,),
-            user ==null? const Text("sıkınıt var "): ListTile(
-                title: Text(user.email!  ),
-            ) ,
-            const Spacer(flex: 100,)
+            Spacer(flex: 5,),
+            Center(child: Text("Takip edilenler")),
+            Divider(),
+            Spacer(flex: 5,),
+            /* user ==null? const Text("sıkınıt var "): ListTile(
+                title: Text(user.email!  )), */
+             
+            Spacer(flex: 100,)
           ],
         ));
   }
