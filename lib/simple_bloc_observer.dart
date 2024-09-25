@@ -19,6 +19,7 @@ void onEvent(Bloc bloc , Object? event){
 void onChange(BlocBase bloc , Change change){
   super.onChange(bloc, change);
   log("on Change -- bloc: ${bloc.runtimeType}, change: $change");
+  log( change.toString());
 }
 @override
 void onTransition(Bloc bloc, Transition transition){

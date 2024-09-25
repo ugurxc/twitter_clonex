@@ -19,4 +19,6 @@ Future<void> setUserData(MyUser user);
 
 //getMyUser
 Future<MyUser> getMyUser(String myUserId);
+
+Future<String> uploadPicture(String file ,String userId);
 }

@@ -2,16 +2,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
+import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:twitter_clonex/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:twitter_clonex/blocs/sign_up_bloc/sign_up_bloc.dart';
+import 'package:twitter_clonex/blocs/update_bloc/update_user_info_bloc.dart';
 import 'package:twitter_clonex/mobile_layout.dart';
 import 'package:twitter_clonex/pages/auth_pages/login_page.dart';
 
-
 import 'package:twitter_clonex/simple_bloc_observer.dart';
 import 'package:user_repository/user_repository.dart';
-
 
 /* void main() async {
   
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
       ));
   }
 } */
-void main() async {
+/* void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -77,11 +78,15 @@ class MyApp extends StatelessWidget {
           title: "twitterclone",
           home: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-              if (state.status == AuthenticationStatus.authenticated) {
-                return const MobileLayout();
-              } else {
-                return const LoginPage();
-              } 
+              if(state.status==AuthenticationStatus.authenticated){
+                return BlocProvider(
+                  create: (context) => SignInBloc(
+                    myUserRepository: context.read<AuthBloc>().userRepository
+                  ),
+                  child: const MobileLayout(),
+                );
+              }
+              else {return const LoginPage();}
 
             },
           ),
@@ -89,4 +94,94 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+} */
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // Ekran yönünü dikey tutma
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  // Bloc Observer
+  Bloc.observer = SimpleBlocObserver();
+
+  // Uygulamayı başlat
+  runApp(MyApp());
 }
+
+class MyApp extends StatelessWidget {
+  final FirebaseUserRepository userRepository = FirebaseUserRepository();
+
+  MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<UserRepository>(
+          create: (_) => userRepository,
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (_) => AuthBloc(myUserRepository: userRepository),
+          ),
+          BlocProvider<SignInBloc>(
+            create: (_) => SignInBloc(myUserRepository: userRepository),
+          ),
+          BlocProvider(
+              create: (context) => UpdateUserInfoBloc(userRepository: context.read<AuthBloc>().userRepository)),
+          BlocProvider<SignUpBloc>(
+            create: (_) => SignUpBloc(userRepository),
+          ),
+          BlocProvider(create: (context) {
+            final authBloc = context.read<AuthBloc>();
+            if (authBloc.state.status == AuthenticationStatus.authenticated && authBloc.state.user != null) {
+              return MyUserBloc(myUserRepository: context.read<AuthBloc>().userRepository)
+                ..add(GetMyUser(myUserId: authBloc.state.user!.uid));
+            }
+            return MyUserBloc(myUserRepository: context.read<AuthBloc>().userRepository);
+          }),
+        ],
+        child: MaterialApp(
+          title: "Twitter Clone",
+          // Aşağıya bir tema tanımlayabilirsiniz
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+             if (state.status == AuthenticationStatus.authenticated && state.user != null){
+              context.read<MyUserBloc>().add(GetMyUser(myUserId: state.user!.uid));
+             }
+            },
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state.status == AuthenticationStatus.authenticated) {
+                  
+                  return const MobileLayout()  ;
+                } else {
+                  return const LoginPage();
+                }
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+} 
+
+
+
+          /*     if (state.status == AuthenticationStatus.authenticated) {
+
+
+                
+                return const MobileLayout();
+              } else {
+                return const LoginPage();
+              }  */
