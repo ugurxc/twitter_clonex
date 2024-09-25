@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
 
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
+import 'package:twitter_clonex/pages/create_twit_pages/create_twit_page.dart';
 
 import 'package:twitter_clonex/pages/deneme.dart';
 
@@ -170,7 +172,14 @@ class _MobileLayoutState extends State<MobileLayout> {
               BottomNavigationBarItem(icon: Icon(Icons.notifications_none_outlined), label: ''),
               BottomNavigationBarItem(icon: Icon(Icons.message_outlined), label: ''),
             ],
-          )
+          ),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.blue, 
+  foregroundColor: Colors.white, 
+            shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(30)),  onPressed: () {
+            Navigator.push(context,
+             MaterialPageRoute<void>(builder: (BuildContext context)=>const CreateTwitPage()));
+          },child: const FaIcon(FontAwesomeIcons.twitter),),
 
           // drawerEdgeDragWidth: MediaQuery.of(context).size.width, // Ekranın tamamını kaydırarak açma
           ),

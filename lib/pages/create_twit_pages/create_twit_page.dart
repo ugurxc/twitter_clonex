@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
+
+class CreateTwitPage extends StatelessWidget {
+  const CreateTwitPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+
+        leading: IconButton(onPressed: () {
+          Navigator.pop(context);
+        }, icon: const Icon(Icons.close)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal:10),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.white),
+                onPressed: () {},
+                child: const Text("Gönderi")),
+          )
+        ],
+      ),
+      body: BlocBuilder<MyUserBloc, MyUserState>(
+        builder: (context, state) {
+          return  Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: [
+                
+                Row(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(state.user!.picture!),),
+                      const SizedBox(width: 10,),
+                      const Expanded(
+                        child: TextField(
+                          minLines: 1,
+                          maxLines: 10,
+                          keyboardType: TextInputType.multiline,
+                          maxLength: 200,
+                          decoration: InputDecoration(
+                            hintText: "Neler oluyor?", hintStyle: TextStyle(color: Colors.grey),
+                               border: InputBorder.none,           // Varsayılan çizgiyi kaldır
+                          enabledBorder: InputBorder.none,    // Etkin olmayan durumdaki çizgiyi kaldır
+                          focusedBorder: InputBorder.none,
+                          ),
+                        ),)
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
