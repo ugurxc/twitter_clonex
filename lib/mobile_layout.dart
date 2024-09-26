@@ -178,7 +178,9 @@ class _MobileLayoutState extends State<MobileLayout> {
   foregroundColor: Colors.white, 
             shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(30)),  onPressed: () {
             Navigator.push(context,
-             MaterialPageRoute<void>(builder: (BuildContext context)=>const CreateTwitPage()));
+             MaterialPageRoute<void>(builder: (BuildContext context)=> CreateTwitPage(
+              context.read<MyUserBloc>().state.user!
+             )));
           },child: const FaIcon(FontAwesomeIcons.twitter),),
 
           // drawerEdgeDragWidth: MediaQuery.of(context).size.width, // Ekranın tamamını kaydırarak açma

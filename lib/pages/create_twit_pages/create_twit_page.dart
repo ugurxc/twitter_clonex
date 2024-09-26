@@ -1,12 +1,31 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:post_repository/post_repository.dart';
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
+import 'package:user_repository/user_repository.dart';
 
-class CreateTwitPage extends StatelessWidget {
-  const CreateTwitPage({super.key});
+class CreateTwitPage extends StatefulWidget {
+  final MyUser myUser;
+  const CreateTwitPage(this.myUser ,{super.key});
 
   @override
+  State<CreateTwitPage> createState() => _CreateTwitPageState();
+}
+
+class _CreateTwitPageState extends State<CreateTwitPage> {
+  late Post post;
+  @override
+  void initState() {
+    post=Post.empty;
+    post.myUser=widget.myUser;
+    super.initState();
+
+  }
+  @override
   Widget build(BuildContext context) {
+    log(post.toString());
     return Scaffold(
       appBar: AppBar(
 
@@ -18,7 +37,10 @@ class CreateTwitPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal:10),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.white),
-                onPressed: () {},
+                onPressed: () {
+                  
+
+                },
                 child: const Text("Gönderi")),
           )
         ],
