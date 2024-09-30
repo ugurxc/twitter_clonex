@@ -11,8 +11,10 @@ class FirebasePostRepository implements PostRepository {
   final postCollection = FirebaseFirestore.instance.collection("posts");
   @override
   Future<Post> createPost(Post post)  async{
+    
     try {
-      post.postId==const  Uuid().v1();
+     
+      post.postId= const Uuid().v1();
       post.creadetAt=DateTime.now();
       await postCollection
       .doc(post.postId)

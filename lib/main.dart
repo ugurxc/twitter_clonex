@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:post_repository/post_repository.dart';
 
 import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
+import 'package:twitter_clonex/blocs/get_post_bloc/get_post_bloc.dart';
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:twitter_clonex/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:twitter_clonex/blocs/sign_up_bloc/sign_up_bloc.dart';
@@ -143,7 +145,10 @@ class MyApp extends StatelessWidget {
                 ..add(GetMyUser(myUserId: authBloc.state.user!.uid));
             }
             return MyUserBloc(myUserRepository: context.read<AuthBloc>().userRepository);
-          }),
+          }
+          
+            ),
+            BlocProvider(create: (context) => GetPostBloc(postRepository: FirebasePostRepository())..add(GetPost()),)
         ],
         child: MaterialApp(
           title: "Twitter Clone",
