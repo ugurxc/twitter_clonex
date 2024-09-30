@@ -10,6 +10,7 @@ import 'package:twitter_clonex/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:twitter_clonex/blocs/update_bloc/update_user_info_bloc.dart';
 import 'package:twitter_clonex/components/constant.dart';
 import 'package:twitter_clonex/pages/auth_pages/login_page.dart';
+import 'package:twitter_clonex/pages/full_screen_foto.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -55,13 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: const Icon(Icons.person),
                               ))
                           : Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(image: NetworkImage(state.user!.picture!))),
+                              padding: const EdgeInsets.all(8.0),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(state.user!.picture!),
                               ),
                             );
                     }
@@ -105,72 +102,96 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: BlocBuilder<GetPostBloc, GetPostState>(
                     builder: (context, state) {
-                      if(state is GetPostSuccess){
-                                                return ListView.builder(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        itemCount: state.posts.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            padding: const EdgeInsets.all(8),
-                            width: double.infinity,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration:  BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(image: NetworkImage(
-                                          state.posts[index].myUser.picture!
-                                        )) 
-                                          ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                     Text(
-                                      state.posts[index].myUser.name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
+                      if (state is GetPostSuccess) {
+                        state.posts.sort((a, b) => b.creadetAt.compareTo(a.creadetAt));
+                        return ListView.builder(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          itemCount: state.posts.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                top: BorderSide(width: 0.1, color: Colors.grey), // Üst çizgi
+                                bottom: BorderSide(width: 0.1, color: Colors.grey), // Alt çizgi
+                              )),
+                              padding: const EdgeInsets.all(8),
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage(state.posts[index].myUser.picture!),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    Expanded(
-                                        child: Text(
-                                      state.posts[index].myUser.email,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    )),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                     Text("${ state.posts[index].creadetAt.day } ${ getMonthName(state.posts[index].creadetAt.month)}--${state.posts[index].creadetAt.hour}:${state.posts[index].creadetAt.minute}" )
-                                  ],
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 48),
-                                  child:  Text(
-                                    state.posts[index].post
-                                     ),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        state.posts[index].myUser.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Expanded(
+                                          child: Text(state.posts[index].myUser.email,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(color: Colors.grey))),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Text(
+                                        "${state.posts[index].creadetAt.day} ${getMonthName(state.posts[index].creadetAt.month)}--${state.posts[index].creadetAt.hour}:${state.posts[index].creadetAt.minute}",
+                                        style: const TextStyle(color: Colors.grey),
+                                      )
+                                    ],
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 48),
+                                    child: Text(state.posts[index].post),
+                                  ),
+                                  state.posts[index].postPic == ""
+                                      ? const SizedBox()
+                                      : Padding(
+                                          padding: const EdgeInsets.only(left: 48),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => FullScreenImagePage(
+                                                            imageUrl: state.posts[index].postPic!,
+                                                          )));
+                                            },
+                                            child: Container(
+                                              height: 400,
+                                              width: 300,
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                      image: NetworkImage(state.posts[index].postPic!))),
+                                            ),
+                                          ),
+                                        )
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      } else if (state is GetPostLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return const Center(
+                          child: Text("Hata var"),
+                        );
                       }
-                      else if (state is GetPostLoading){
-                        return const Center(child: CircularProgressIndicator(),);
-                      }
-                      else{
-                        return const Center(child: Text("Hata var"),);
-                      }
-
                     },
                   ),
                 ),

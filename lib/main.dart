@@ -101,7 +101,7 @@ class MyApp extends StatelessWidget {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  
   // Ekran yönünü dikey tutma
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 

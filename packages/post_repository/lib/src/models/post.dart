@@ -6,11 +6,12 @@ class Post {
   String post;
   DateTime creadetAt;
   MyUser myUser;
+  String? postPic;
 
-   Post({required this.postId, required this.post, required this.creadetAt, required this.myUser});
+   Post({required this.postId, required this.post, required this.creadetAt, required this.myUser ,  this.postPic});
 
 
-  static final  empty= Post(postId: "", post: "", creadetAt: DateTime.now(), myUser: MyUser.empty);
+  static final  empty= Post(postId: "", post: "", creadetAt: DateTime.now(), myUser: MyUser.empty , postPic: "");
 
 
     Post copyWith({
@@ -18,12 +19,14 @@ class Post {
     String? post,
     DateTime? creadetAt,
     MyUser? myUser,
+    String? postPic
   }) {
     return Post(
       postId: postId ?? this.postId,
       post: post ?? this.post,
       creadetAt: creadetAt ?? this.creadetAt,
       myUser: myUser ?? this.myUser,
+      postPic: postPic ?? this.postPic
     );
   }
 
@@ -36,13 +39,14 @@ class Post {
       postId:postId,
       post:post,
       creadetAt:creadetAt,
-      myUser:myUser
+      myUser:myUser,
+      postPic:postPic
 
     );
   }
 
   static Post fromEntitiy(PostEntities entity){
-      return Post(postId: entity.postId, post: entity.post, creadetAt: entity.creadetAt, myUser: entity.myUser);
+      return Post(postId: entity.postId, post: entity.post, creadetAt: entity.creadetAt, myUser: entity.myUser , postPic:entity.postPic);
   }
 
 
@@ -57,6 +61,7 @@ class Post {
     post: $post
     creadetAt: $creadetAt
     myUser: $myUser
+    postPic: $postPic
 
     }''';
   }

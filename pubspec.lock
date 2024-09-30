@@ -202,7 +202,7 @@ packages:
     source: hosted
     version: "2.18.1"
   firebase_storage:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_storage
       sha256: "81a111623da3af66c90f8aae2dabc35d8fc78a497c14c66b6ac89be3b6dda264"
