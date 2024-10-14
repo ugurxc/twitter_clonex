@@ -9,11 +9,13 @@ class MyUser extends Equatable {
   final String email;
   final String name;
    String? picture;
+   List<String>? follower;
+   List<String>? following;
 
-   MyUser({required this.id, required this.email, required this.name,  this.picture});
+   MyUser({required this.id, required this.email, required this.name,  this.picture , this.follower, this.following});
 
 
-  static final  empty= MyUser(id: "", email: "", name: "", picture: "");
+  static final  empty= MyUser(id: "", email: "", name: "", picture: "" , follower: const [] , following:  const []);
 
 
     MyUser copyWith({
@@ -21,14 +23,23 @@ class MyUser extends Equatable {
     String? email,
     String? name,
     String? picture,
+    List<String>? follower,
+    List<String>? following,
+
   }) {
     return MyUser(
       id: id ?? this.id,
       email: email ?? this.email,
       name: name ?? this.name,
       picture: picture ?? this.picture,
+      follower: follower ?? this.follower,
+      following: following?? this.following
     );
   }
+
+  int get followingCount => following?.length ?? 0;
+
+  int get followerCount => follower?.length ?? 0;
 
   bool get  isEmpty => this==MyUser.empty;
 
@@ -39,22 +50,41 @@ class MyUser extends Equatable {
       id:id,
       email:email,
       name:name,
-      picture:picture
+      picture:picture,
+      follower:follower,
+      following:following
+      
 
     );
   }
 
   static MyUser fromEntitiy(MyUserEntities entity){
-      return MyUser(id: entity.id, email: entity.email, name: entity.name, picture: entity.picture);
+      return MyUser(id: entity.id, email: entity.email, name: entity.name, picture: entity.picture,follower:entity.follower,following:entity.following );
   }
 
+  void addFollower(String userId) {
+    follower = (follower ?? [])..add(userId);
+  }
 
+  void removeFollower(String userId) {
+    follower = (follower ?? [])..remove(userId);
+  }
 
+  void addFollowing(String userId) {
+    following = (following ?? [])..add(userId);
+  }
 
+  void removeFollowing(String userId) {
+    following = (following ?? [])..remove(userId);
+  }
+
+bool isFollowing(MyUser currentUser, String targetUserId) {
+  return currentUser.following?.contains(targetUserId) ?? false;
+}
 
   @override
 
-  List<Object?> get props => [id,email,name,picture];
+  List<Object?> get props => [id,email,name,picture,follower , following , ];
 
 
 

@@ -1,4 +1,4 @@
-part of 'get_post_bloc.dart';
+/* part of 'get_post_bloc.dart';
 
 abstract class GetPostEvent extends Equatable {
   const GetPostEvent();
@@ -7,3 +7,4 @@ abstract class GetPostEvent extends Equatable {
   List<Object> get props => [];
 }
 class GetPost extends GetPostEvent{}
+ */

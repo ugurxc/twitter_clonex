@@ -1,4 +1,4 @@
-part of 'create_post_bloc.dart';
+/* part of 'create_post_bloc.dart';
 
 abstract class CreatePostEvent extends Equatable {
   const CreatePostEvent();
@@ -10,3 +10,4 @@ class CreatePost extends CreatePostEvent{
   final Post post;
   const CreatePost(this.post);
 }
+ */

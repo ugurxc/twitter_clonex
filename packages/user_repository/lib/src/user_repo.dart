@@ -21,4 +21,11 @@ Future<void> setUserData(MyUser user);
 Future<MyUser> getMyUser(String myUserId);
 
 Future<String> uploadPicture(String file ,String userId);
+
+Future<List<MyUser>> searchUsers(String query);
+
+
+Future<void> followUser(MyUser currentUser, MyUser targetUser);
+
+Future<void> unfollowUser(MyUser currentUser, MyUser targetUser);
 }

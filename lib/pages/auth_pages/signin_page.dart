@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
 import 'package:twitter_clonex/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:twitter_clonex/components/constant.dart';
 import 'package:twitter_clonex/components/sign_textfield.dart';
@@ -26,7 +27,7 @@ class _SigninPageState extends State<SigninPage> {
       appBar: AppBar(centerTitle: true, title: const FaIcon(FontAwesomeIcons.xTwitter)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: BlocListener<SignInBloc, SignInState>(
+        child: BlocListener<AuthBloc, AuthState>(
   listener: (context, state) {
         if(state is SignInSuccsess) {
 					setState(() {
@@ -110,7 +111,7 @@ class _SigninPageState extends State<SigninPage> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   context
-                                      .read<SignInBloc>()
+                                      .read<AuthBloc>()
                                       .add(SignInRequired(emailController.text, passwordController.text));
                                 }
                               },

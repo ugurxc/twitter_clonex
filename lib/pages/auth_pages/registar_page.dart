@@ -100,6 +100,7 @@ class _RegistarPageState extends State<RegistarPage> {
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
 import 'package:twitter_clonex/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:twitter_clonex/components/constant.dart';
 import 'package:twitter_clonex/components/sign_textfield.dart';
@@ -138,7 +139,7 @@ class _RegistarPageState extends State<RegistarPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
-          child: BlocListener<SignUpBloc, SignUpState>(
+          child: BlocListener<AuthBloc, AuthState>(
 			listener: (context, state) {
 				if(state is SignUpSuccsess) {
 					setState(() {
@@ -321,7 +322,7 @@ class _RegistarPageState extends State<RegistarPage> {
                                     );
 
                                     setState(() {
-                                      context.read<SignUpBloc>().add(SignUpRequired(myUser, passwordController.text));
+                                      context.read<AuthBloc>().add(SignUpRequired(myUser, passwordController.text));
                                     });
                                   }
                                 },

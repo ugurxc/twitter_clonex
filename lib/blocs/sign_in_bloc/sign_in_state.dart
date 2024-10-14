@@ -1,4 +1,4 @@
-part of 'sign_in_bloc.dart';
+/* part of 'sign_in_bloc.dart';
 
 abstract class SignInState extends Equatable {
   const SignInState();
@@ -20,4 +20,4 @@ class SignInFailure extends SignInState{
 
 class SignInProcess extends SignInState{}
 
-class SignOutSuccess extends SignInState {}
+class SignOutSuccess extends SignInState {} */

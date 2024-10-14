@@ -95,6 +95,77 @@ class FirebaseUserRepository implements UserRepository {
     }
   }
   
+  @override
+  Future<List<MyUser>> searchUsers(String query) async{
+     final result = await FirebaseFirestore.instance
+      .collection('user')
+      .where('name', isGreaterThanOrEqualTo: query)
+      .where('name', isLessThanOrEqualTo: '$query\uf8ff')
+      .get();
+
+  return result.docs.map((doc) => MyUser.fromEntitiy(MyUserEntities.fromDocument(doc.data()))).toList();
+  }
+  
+  @override
+  Future<void> followUser(MyUser currentUser, MyUser targetUser)async {
+   try {
+    // currentUser "following" listesine targetUser'ı ekler
+    currentUser.addFollowing(targetUser.id);
+
+    // targetUser "follower" listesine currentUser'ı ekler
+    targetUser.addFollower(currentUser.id);
+
+    // Firestore'da currentUser güncellenir
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(currentUser.id)
+        .update({
+      'following': currentUser.following,
+    });
+
+    // Firestore'da targetUser güncellenir
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(targetUser.id)
+        .update({
+      'follower': targetUser.follower,
+    });
+  } catch (e) {
+    log("Takip etme hatası: $e");
+  }
+  
+  }
+  
+  @override
+  Future<void> unfollowUser(MyUser currentUser, MyUser targetUser) async{
+   try {
+    // currentUser "following" listesinden targetUser'ı çıkarır
+    currentUser.removeFollowing(targetUser.id);
+
+    // targetUser "follower" listesinden currentUser'ı çıkarır
+    targetUser.removeFollower(currentUser.id);
+
+    // Firestore'da currentUser güncellenir
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(currentUser.id)
+        .update({
+      'following': currentUser.following,
+    });
+
+    // Firestore'da targetUser güncellenir
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(targetUser.id)
+        .update({
+      'follower': targetUser.follower,
+    });
+  } catch (e) {
+    log("Takipten çıkma hatası: $e");
+  }
+  }
+  
+ 
 
 
   //sign in

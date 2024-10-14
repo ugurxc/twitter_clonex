@@ -104,3 +104,57 @@ class AuthService {
 
   
 } */
+
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+/* Future<UserCredential> signInWithGoogle() async{
+
+    
+      final GoogleSignInAccount? gUser =  await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? gAuth =await gUser?.authentication;
+
+    final credential =GoogleAuthProvider.credential(accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
+
+    
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    
+      
+      
+    } */
+    
+
+
+
+
+
+
+class Authentication {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      // Google ile oturum açma
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+
+      // Firebase ile oturum açma
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      return await _auth.signInWithCredential(credential);
+    } catch (e) {
+      log("Hata: ${e.toString()}");
+      // Hata mesajını kullanıcıya gösterin
+      // Örneğin, bir hata mesajı gösteren bir iletişim kutusu kullanın
+    }
+    return null;
+  }
+}

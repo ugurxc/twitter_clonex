@@ -4,6 +4,9 @@ class MessageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.red,);
+    final value = ModalRoute.of(context)!.settings.arguments;
+    return Scaffold(appBar: AppBar(),
+    
+    body: Center(child: Text('adsfads $value'),),);
   }
 }

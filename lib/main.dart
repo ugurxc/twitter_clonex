@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:post_repository/post_repository.dart';
 
 import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
+import 'package:twitter_clonex/blocs/bloc/post_bloc.dart';
 import 'package:twitter_clonex/blocs/get_post_bloc/get_post_bloc.dart';
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
+
 import 'package:twitter_clonex/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:twitter_clonex/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:twitter_clonex/blocs/update_bloc/update_user_info_bloc.dart';
@@ -130,25 +132,24 @@ class MyApp extends StatelessWidget {
           BlocProvider<AuthBloc>(
             create: (_) => AuthBloc(myUserRepository: userRepository),
           ),
-          BlocProvider<SignInBloc>(
-            create: (_) => SignInBloc(myUserRepository: userRepository),
-          ),
+
           BlocProvider(
               create: (context) => UpdateUserInfoBloc(userRepository: context.read<AuthBloc>().userRepository)),
-          BlocProvider<SignUpBloc>(
-            create: (_) => SignUpBloc(userRepository),
+
+          BlocProvider(
+            create: (context) {
+              final authBloc = context.read<AuthBloc>();
+              
+              if (authBloc.state is AuthAuthenticated) {
+                final authenticatedState = authBloc.state as AuthAuthenticated;
+                return MyUserBloc(myUserRepository: authBloc.userRepository)
+                  ..add(GetMyUser(myUserId: authenticatedState.user.uid));
+                            }
+              
+              return MyUserBloc(myUserRepository: authBloc.userRepository);
+            },
           ),
-          BlocProvider(create: (context) {
-            final authBloc = context.read<AuthBloc>();
-            if (authBloc.state.status == AuthenticationStatus.authenticated && authBloc.state.user != null) {
-              return MyUserBloc(myUserRepository: context.read<AuthBloc>().userRepository)
-                ..add(GetMyUser(myUserId: authBloc.state.user!.uid));
-            }
-            return MyUserBloc(myUserRepository: context.read<AuthBloc>().userRepository);
-          }
-          
-            ),
-            BlocProvider(create: (context) => GetPostBloc(postRepository: FirebasePostRepository())..add(GetPost()),)
+            BlocProvider(create: (context) => PostBloc(postRepository: FirebasePostRepository())..add(GetPost()),)
         ],
         child: MaterialApp(
           title: "Twitter Clone",
@@ -159,13 +160,13 @@ class MyApp extends StatelessWidget {
           ),
           home: BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
-             if (state.status == AuthenticationStatus.authenticated && state.user != null){
-              context.read<MyUserBloc>().add(GetMyUser(myUserId: state.user!.uid));
+             if (state is  AuthAuthenticated){
+              context.read<MyUserBloc>().add(GetMyUser(myUserId: state.user.uid));
              }
             },
             child: BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
-                if (state.status == AuthenticationStatus.authenticated) {
+                if (state is AuthAuthenticated) {
                   
                   return const MobileLayout()  ;
                 } else {

@@ -1,170 +1,19 @@
-/* import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      /* appBar: AppBar(
-        backgroundColor: Colors.blue,
-        toolbarHeight: 120, // AppBar yüksekliğini ayarlama
-        leading: Align(
-          alignment: Alignment.topCenter, // İkonu AppBar'da ortalar
-          child: Container(
-            constraints: const BoxConstraints(
-              maxHeight: 32,
-              maxWidth: 32,
-            ),
-           
-   
-            decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color.fromARGB(255, 14, 64, 105)
-          ),
-
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.arrow_back, color: Colors.white,size: 20,), // Geri butonu
-              onPressed: () {
-                Navigator.of(context).pop(); // Geri dönme fonksiyonu
-              },
-            ),
-          ),
-        ),
-      ), */
-      body: Stack(
-      
-  children: [
-    
-    Container(
-      width: MediaQuery.of(context).size.width,
-      height: 180,
-      color: Colors.blue,
-      child: Align(
-        alignment: Alignment.topLeft, // Konumlandırma
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30, left: 10),
-          child: Container(
-            width: 32, // Yuvarlak container'ın genişliği
-            height: 32, // Yuvarlak container'ın yüksekliği
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color.fromARGB(255, 14, 64, 105),
-            ),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(Icons.arrow_back, color: Colors.white, size: 20), // Geri butonu
-              onPressed: () {
-                Navigator.of(context).pop(); // Geri dönme fonksiyonu
-              },
-            ),
-          ),
-        ),
-      ),
-    ),
- 
-    Positioned(
-            top: 180 - 50, // Mavi alanın içine yerleştiriyoruz
-            left: 10, // Ortalamak için
-            child: Container(
-              alignment: Alignment.centerLeft,
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: const Color.fromARGB(255, 224, 91, 91), // Beyaz çerçeve ekleyebilirsiniz
-                  width: 4,
-                ),)))
-  ],
-)
-    );
-  }
-}  */
-
-/* import 'package:flutter/material.dart';
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Üstte mavi arka plan
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 180,
-            color: Colors.blue,
-          ),
-          // Profil resmi ve diğer bileşenler
-          Positioned(
-            
-            top: 130, // Mavi alanın içine yerleştiriyoruz
-            left: MediaQuery.of(context).size.width / 2 - 50, // Ortalamak için
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.red, // Beyaz çerçeve ekleyebilirsiniz
-                  width: 4,
-                ),
-                image: const DecorationImage(
-                  image: NetworkImage('https://via.placeholder.com/150'), // Profil resmi URL'si
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          // Diğer içerikler
-          const Positioned(
-            top: 220,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                Text(
-                  "soft",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  "@soft1298817",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.red,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
- */
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:twitter_clonex/blocs/update_bloc/update_user_info_bloc.dart';
 import 'package:twitter_clonex/pages/profile_page/click_profile_page.dart';
+import 'package:twitter_clonex/pages/profile_page/my_post.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class MyProfilePage extends StatefulWidget {
+  const MyProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<MyProfilePage> createState() => _MYProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _MYProfilePageState extends State<MyProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ClickProfilePage(
-                                imageUrl: state.user?.picture ?? 'https://via.placeholder.com/150',
+                                imageUrl: state.user?.picture ?? 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
                               ),
                             ));
                           },
@@ -236,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               image: DecorationImage(
                                 image: state.user!.picture == ""
-                                    ? const NetworkImage('https://via.placeholder.com/150')
+                                    ? const NetworkImage('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
                                     : NetworkImage(state.user!.picture!), // Profil resmi URL'si
                                 fit: BoxFit.cover,
                               ),
@@ -275,27 +124,27 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const Row(
+                         Row(
                           children: [
                             Text(
-                              "15",
-                              style: TextStyle(fontWeight: FontWeight.w700),
+                              state.user!.followingCount.toString(),
+                              style: const TextStyle(fontWeight: FontWeight.w700),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 4,
                             ),
-                            InkWell(child: Text("Takip edilen")),
-                            SizedBox(
+                            const InkWell(child: Text("Takip edilen")),
+                            const SizedBox(
                               width: 12,
                             ),
-                            Text(
-                              "9",
-                              style: TextStyle(fontWeight: FontWeight.w700),
+                             Text(
+                              state.user!.followerCount.toString(),
+                              style: const TextStyle(fontWeight: FontWeight.w700),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 4,
                             ),
-                            InkWell(child: Text("Takipçi"))
+                            const InkWell(child: Text("Takipçi"))
                           ],
                         )
                       ],
@@ -327,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: 400, // Her sekmenin içeriği için belirli bir yükseklik
                           child: TabBarView(
                             children: [
-                              Center(child: Text('Sekme 1 İçeriği')),
+                              MyPost(),
                               Center(child: Text('Sekme 2 İçeriği')),
                               Center(child: Text('Sekme 3 İçeriği')),
                               Center(child: Text('Sekme 4 İçeriği')),

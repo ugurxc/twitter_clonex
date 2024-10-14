@@ -96,11 +96,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
 import 'package:twitter_clonex/blocs/sign_up_bloc/sign_up_bloc.dart';
 
 import 'package:twitter_clonex/pages/auth_pages/registar_page.dart';
 
 import 'package:twitter_clonex/pages/auth_pages/signin_page.dart';
+import 'package:twitter_clonex/pages/home_page/home_screen.dart';
+import 'package:twitter_clonex/pages/message_page/message_screen.dart';
+import 'package:twitter_clonex/services/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -132,7 +136,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                   /*   AuthService().signInWithGoogle().then((value) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomeScreen(),settings: RouteSettings(arguments: value))),); */ 
+                    /*  Authentication().signInWithGoogle().then((value) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MessageScreen(),settings: RouteSettings(arguments: value))),);   */
                   },
                   child: Container(
                     height: 50,
@@ -157,7 +161,7 @@ class LoginPage extends StatelessWidget {
                     Navigator.of(context).push(
   MaterialPageRoute(
     builder: (context) => BlocProvider.value(
-      value: BlocProvider.of<SignUpBloc>(context),
+      value: BlocProvider.of<AuthBloc>(context),
       child: const RegistarPage(),
     ),
   ),

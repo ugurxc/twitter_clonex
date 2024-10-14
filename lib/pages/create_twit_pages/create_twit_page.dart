@@ -1,13 +1,16 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:post_repository/post_repository.dart';
+import 'package:twitter_clonex/blocs/bloc/post_bloc.dart';
 import 'package:twitter_clonex/blocs/create_post_bloc/create_post_bloc.dart';
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
+
 import 'package:user_repository/user_repository.dart';
 
 class CreateTwitPage extends StatefulWidget {
@@ -20,20 +23,25 @@ class CreateTwitPage extends StatefulWidget {
 
 class _CreateTwitPageState extends State<CreateTwitPage> {
   late Post post;
+  late User user;
+  
   final TextEditingController _textController = TextEditingController();
   @override
   void initState() {
     post = Post.empty;
     post.myUser = widget.myUser;
+    user = FirebaseAuth.instance.currentUser!;
     super.initState();
+  
   }
 
   final ImagePicker _picker = ImagePicker();
 XFile? _selectedImage;
 
-Future<String?> _uploadImage(XFile image) async {
+Future<String?> _uploadImage(XFile image,String userId) async {
+
   try {
-    final storageRef = FirebaseStorage.instance.ref().child('post_images/${image.name}');
+    final storageRef = FirebaseStorage.instance.ref().child('$userId/PostImage/${image.name}'); //$userId/PP/${userId}_lead
     await storageRef.putFile(File(image.path));
     return await storageRef.getDownloadURL();
   } catch (e) {
@@ -56,7 +64,7 @@ Future<void> _pickImage() async {
 }
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreatePostBloc, CreatePostState>(
+    return BlocListener<PostBloc, PostState>(
       listener: (context, state) {
         if(state is CreatePostSuccess){
           Navigator.pop(context);
@@ -67,6 +75,7 @@ Future<void> _pickImage() async {
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
+                
               },
               icon: const Icon(Icons.close)),
           actions: [
@@ -82,14 +91,14 @@ Future<void> _pickImage() async {
 
     // Eğer fotoğraf seçildiyse önce fotoğrafı yükle
     if (_selectedImage != null) {
-      String? imageUrl = await _uploadImage(_selectedImage!);
+      String? imageUrl = await _uploadImage(_selectedImage!,widget.myUser.id);
       if (imageUrl != null) {
         post = post.copyWith(postPic: imageUrl);
       }
     }
 
     // Sonrasında gönderiyi oluştur
-    context.read<CreatePostBloc>().add(CreatePost(post));
+    context.read<PostBloc>().add(CreatePost(post));
     log(post.toString());
   }
                   },

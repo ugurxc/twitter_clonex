@@ -1,4 +1,4 @@
-import 'dart:developer';
+/* import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -23,3 +23,4 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     });
   }
 }
+ */

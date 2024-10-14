@@ -1,4 +1,4 @@
-part of 'create_post_bloc.dart';
+/* part of 'create_post_bloc.dart';
 
 abstract class CreatePostState extends Equatable {
   const CreatePostState();
@@ -15,3 +15,4 @@ final class CreatePostSuccess extends CreatePostState {
   final Post post;
   const CreatePostSuccess(this.post);
 }
+ */

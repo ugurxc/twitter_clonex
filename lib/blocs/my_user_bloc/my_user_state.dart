@@ -20,5 +20,5 @@ const MyUserState.failure(): this._(status: MyUserStatus.failure);
 
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [user, status];
 }

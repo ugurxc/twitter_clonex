@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:twitter_clonex/blocs/bloc/post_bloc.dart';
 import 'package:twitter_clonex/blocs/get_post_bloc/get_post_bloc.dart';
+
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -9,7 +11,7 @@ class NotificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<GetPostBloc, GetPostState>(
+      body: BlocBuilder<PostBloc, PostState>(
 
         builder: (context, state){
           if ( state is GetPostSuccess){

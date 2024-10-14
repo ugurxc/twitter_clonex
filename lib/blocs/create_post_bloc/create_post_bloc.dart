@@ -1,4 +1,4 @@
-
+/* 
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -21,3 +21,4 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
     });
   }
 }
+ */

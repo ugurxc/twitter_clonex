@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 
 
@@ -18,7 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   late final StreamSubscription<User?> _userSubscription;
   AuthBloc({
     required UserRepository myUserRepository
-  }) :userRepository=myUserRepository ,super(const AuthState.unknow()) {
+  }) :userRepository=myUserRepository ,super( AuthUnknown()) {
     _userSubscription=userRepository.user.listen((authUser) {
       add(AuthenticationUserChanged(authUser));
     },);
@@ -26,14 +27,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthenticationUserChanged>((event, emit) async {
         
           if(event.user!=null){
-            emit(AuthState.authenticated(event.user!));
+            emit(AuthAuthenticated(event.user!));
             
           }
           else{
-            emit(const AuthState.unauthenticated());
+            emit( AuthUnauthenticated());
           }
 
     });
+        on<SignInRequired>((event, emit) async{
+      emit(SignInProcess());
+      try {
+        await  myUserRepository.signInWithEmailPassword(event.email,event.password);
+        emit(SignInSuccsess());
+      } catch (e) {
+        log(e.toString());
+        emit(const SignInFailure());  
+      }
+    });
+        on<SignUpRequired>((event, emit) async{
+      emit(SignUpProcess());
+      try {
+        MyUser user = await myUserRepository.signUpWithEmailPassword(event.user, event.password) ;
+        await myUserRepository.setUserData(user);
+        emit(SignUpSuccsess());
+      } catch (e) {
+        log(e.toString());
+        emit(SignUpFailure());
+      }
+    });
+       on<SignOutRequired>((event,emit) async{
+
+      await myUserRepository.logOut();
+      emit(SignOutSuccess());
+      
+      
+    }) ;
   }
   @override
   Future<void> close(){

@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:twitter_clonex/blocs/get_post_bloc/get_post_bloc.dart';
+import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
+
 
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
-import 'package:twitter_clonex/blocs/sign_in_bloc/sign_in_bloc.dart';
+
+
 import 'package:twitter_clonex/blocs/update_bloc/update_user_info_bloc.dart';
 import 'package:twitter_clonex/components/constant.dart';
 import 'package:twitter_clonex/pages/auth_pages/login_page.dart';
 import 'package:twitter_clonex/pages/full_screen_foto.dart';
+
+import '../../blocs/bloc/post_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -66,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 actions: [
-                  BlocListener<SignInBloc, SignInState>(
+                  BlocListener<AuthBloc, AuthState>(
                     listener: (context, state) {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const LoginPage(),
@@ -74,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: IconButton(
                         onPressed: () {
-                          context.read<SignInBloc>().add(const SignOutRequired());
+                          context.read<AuthBloc>().add(const SignOutRequired());
                           context.read<MyUserBloc>().add(LogoutUser());
                         },
                         icon: const Icon(Icons.exit_to_app_rounded)),
@@ -100,13 +104,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(user!.email!),
                 ),
                 Expanded(
-                  child: BlocBuilder<GetPostBloc, GetPostState>(
+                  child: BlocBuilder<PostBloc, PostState>(
                     builder: (context, state) {
+                      
                       if (state is GetPostSuccess) {
-                        state.posts.sort((a, b) => b.creadetAt.compareTo(a.creadetAt));
+                        final userPosts = state.posts
+    .where((post) => context.read<MyUserBloc>().state.user!.following!.contains(post.myUser.id))
+    .toList();
+
+                        userPosts.sort((a, b) => b.creadetAt.compareTo(a.creadetAt));
                         return ListView.builder(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          itemCount: state.posts.length,
+                          itemCount: userPosts.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               decoration: const BoxDecoration(
@@ -123,13 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       CircleAvatar(
-                                        backgroundImage: NetworkImage(state.posts[index].myUser.picture!),
+                                        backgroundImage: NetworkImage(userPosts[index].myUser.picture!),
                                       ),
                                       const SizedBox(
                                         width: 10,
                                       ),
                                       Text(
-                                        state.posts[index].myUser.name,
+                                        userPosts[index].myUser.name,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w700,
                                         ),
@@ -138,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: 20,
                                       ),
                                       Expanded(
-                                          child: Text(state.posts[index].myUser.email,
+                                          child: Text(userPosts[index].myUser.email,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(color: Colors.grey))),
@@ -146,16 +155,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: 20,
                                       ),
                                       Text(
-                                        "${state.posts[index].creadetAt.day} ${getMonthName(state.posts[index].creadetAt.month)}--${state.posts[index].creadetAt.hour}:${state.posts[index].creadetAt.minute}",
+                                        "${userPosts[index].creadetAt.day} ${getMonthName(userPosts[index].creadetAt.month)}--${userPosts[index].creadetAt.hour}:${userPosts[index].creadetAt.minute}",
                                         style: const TextStyle(color: Colors.grey),
                                       )
                                     ],
                                   ),
                                   Container(
                                     padding: const EdgeInsets.only(left: 48),
-                                    child: Text(state.posts[index].post),
+                                    child: Text(userPosts[index].post),
                                   ),
-                                  state.posts[index].postPic == ""
+                                  userPosts[index].postPic == ""
                                       ? const SizedBox()
                                       : Padding(
                                           padding: const EdgeInsets.only(left: 48),
@@ -165,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) => FullScreenImagePage(
-                                                            imageUrl: state.posts[index].postPic!,
+                                                            imageUrl: userPosts[index].postPic!,
                                                           )));
                                             },
                                             child: Container(
@@ -174,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                     fit: BoxFit.cover,
-                                                      image: NetworkImage(state.posts[index].postPic!))),
+                                                      image: NetworkImage(userPosts[index].postPic!))),
                                             ),
                                           ),
                                         )

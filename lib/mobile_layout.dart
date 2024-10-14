@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:post_repository/post_repository.dart';
 
 import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
+import 'package:twitter_clonex/blocs/bloc/post_bloc.dart';
 import 'package:twitter_clonex/blocs/create_post_bloc/create_post_bloc.dart';
 
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
@@ -15,7 +16,9 @@ import 'package:twitter_clonex/pages/home_page/home_screen.dart';
 import 'package:twitter_clonex/pages/message_page/message_screen.dart';
 import 'package:twitter_clonex/pages/notifications_page/notifications_screen.dart';
 
-import 'package:twitter_clonex/pages/profile_page/profile_page.dart';
+import 'package:twitter_clonex/pages/profile_page/my_profile_page.dart';
+import 'package:twitter_clonex/pages/profile_page/user_profile_page.dart';
+import 'package:twitter_clonex/pages/search_page/search_screen.dart';
 
 class MobileLayout extends StatefulWidget {
   const MobileLayout({
@@ -28,20 +31,19 @@ class MobileLayout extends StatefulWidget {
 
 class _MobileLayoutState extends State<MobileLayout> {
   final PageController _pageController = PageController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state.status == AuthenticationStatus.authenticated) {
-          setState(() {
-            MyUserBloc(myUserRepository: context.read<AuthBloc>().userRepository)
-                .add(GetMyUser(myUserId: context.read<AuthBloc>().state.user!.uid));
-          });
+        if (state is AuthAuthenticated) {
+          
         }
       },
       child: Scaffold(
+        key: _scaffoldKey,
         drawer: BlocBuilder<MyUserBloc, MyUserState>(
           builder: (context, state) {
             if (state.status == MyUserStatus.succsess) {
@@ -54,15 +56,28 @@ class _MobileLayoutState extends State<MobileLayout> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(state.user!.picture!),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const ProfilePage(),
-                                  ));
-                                },
-                              ),
+                            InkWell(onTap: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => const MyProfilePage(),
+                                    ));
+                                    _scaffoldKey.currentState!.openEndDrawer();
+                                  },
+                               /*    child: Container(
+                                    width: 30,
+                                    height: 30,
+                                    decoration: const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+                                    child: const Icon(Icons.person),
+                                  ), */
+                               child:  CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                   backgroundImage: 
+                                    state.user!.picture !=""
+                                    ? NetworkImage(state.user!.picture!)
+                                    : const NetworkImage('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
+                                
+                                  
+                                
+                              ), 
                             ),
                             Text(
                               maxLines: 1,
@@ -77,8 +92,8 @@ class _MobileLayoutState extends State<MobileLayout> {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Text("0 Takip edilen    0 Takipçi",
-                                style: TextStyle(
+                              Text("${state.user!.followingCount} Takip edilen  ${state.user!.followerCount}  Takipçi",
+                                style: const TextStyle(
                                   color: Color.fromARGB(255, 96, 96, 96),
                                   fontSize: 14,
                                 ))
@@ -97,7 +112,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                       leading: const Icon(Icons.settings),
                       title: const Text('Ayarlar'),
                       onTap: () {
-                        // Ayarlar aksiyonu
+                        
                       },
                     ),
                     ListTile(
@@ -143,8 +158,8 @@ class _MobileLayoutState extends State<MobileLayout> {
         ),
         body: PageView(
           controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: const [HomeScreen(), TabBarExample(), NotificationsScreen(), MessageScreen()],
+          physics: const AlwaysScrollableScrollPhysics(),
+          children:  const [HomeScreen(), SearchScreen(), NotificationsScreen(), MessageScreen()],
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color(0xFFF5F8FA),
@@ -177,8 +192,8 @@ class _MobileLayoutState extends State<MobileLayout> {
             Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                    builder: (BuildContext context) => BlocProvider<CreatePostBloc>(
-                          create: (context) => CreatePostBloc(postRepository: FirebasePostRepository()),
+                    builder: (BuildContext context) => BlocProvider<PostBloc>(
+                          create: (context) => PostBloc(postRepository: FirebasePostRepository()),
                           child: CreateTwitPage(context.read<MyUserBloc>().state.user!),
                         )));
           },

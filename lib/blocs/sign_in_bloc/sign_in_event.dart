@@ -1,4 +1,4 @@
-part of 'sign_in_bloc.dart';
+/* part of 'sign_in_bloc.dart';
 
 abstract class SignInEvent extends Equatable {
   const SignInEvent();
@@ -17,4 +17,4 @@ class SignInRequired extends SignInEvent{
 
 class SignOutRequired extends SignInEvent{
   const SignOutRequired();
-}
+} */
