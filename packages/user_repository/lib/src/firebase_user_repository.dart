@@ -164,6 +164,20 @@ class FirebaseUserRepository implements UserRepository {
     log("Takipten çıkma hatası: $e");
   }
   }
+  @override 
+    Future<List<MyUser>> getUsersByIds(List<String> userIds) async {
+    try {
+      final usersSnapshot = await userCollection.where('id', whereIn: userIds).get();
+      return usersSnapshot.docs.map((doc) {
+        return MyUser.fromEntitiy(MyUserEntities.fromDocument(doc.data()));
+      }).toList();
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+  
+}
   
  
 
@@ -175,4 +189,4 @@ class FirebaseUserRepository implements UserRepository {
   //sign up
 
   //reset password
-}
+

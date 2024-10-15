@@ -1,23 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:post_repository/post_repository.dart';
 
 import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
-import 'package:twitter_clonex/blocs/bloc/post_bloc.dart';
-import 'package:twitter_clonex/blocs/create_post_bloc/create_post_bloc.dart';
+import 'package:twitter_clonex/blocs/post_bloc/post_bloc.dart';
+
 
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:twitter_clonex/pages/create_twit_pages/create_twit_page.dart';
 
-import 'package:twitter_clonex/pages/deneme.dart';
+
 
 import 'package:twitter_clonex/pages/home_page/home_screen.dart';
 import 'package:twitter_clonex/pages/message_page/message_screen.dart';
 import 'package:twitter_clonex/pages/notifications_page/notifications_screen.dart';
 
 import 'package:twitter_clonex/pages/profile_page/my_profile_page.dart';
-import 'package:twitter_clonex/pages/profile_page/user_profile_page.dart';
+
 import 'package:twitter_clonex/pages/search_page/search_screen.dart';
 
 class MobileLayout extends StatefulWidget {
@@ -36,6 +37,7 @@ class _MobileLayoutState extends State<MobileLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final User user=FirebaseAuth.instance.currentUser!;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
@@ -159,7 +161,7 @@ class _MobileLayoutState extends State<MobileLayout> {
         body: PageView(
           controller: _pageController,
           physics: const AlwaysScrollableScrollPhysics(),
-          children:  const [HomeScreen(), SearchScreen(), NotificationsScreen(), MessageScreen()],
+          children:   [const HomeScreen(), const SearchScreen(),   NotificationsPage(userId: user.uid,), FollowingUsersPage()],
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color(0xFFF5F8FA),
@@ -184,7 +186,7 @@ class _MobileLayoutState extends State<MobileLayout> {
             BottomNavigationBarItem(icon: Icon(Icons.message_outlined), label: ''),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: _currentIndex!=3 ? FloatingActionButton(
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -198,7 +200,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                         )));
           },
           child: const FaIcon(FontAwesomeIcons.twitter),
-        ),
+        ):null,
 
         // drawerEdgeDragWidth: MediaQuery.of(context).size.width, // Ekranın tamamını kaydırarak açma
       ),

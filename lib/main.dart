@@ -5,12 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:post_repository/post_repository.dart';
 
 import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
-import 'package:twitter_clonex/blocs/bloc/post_bloc.dart';
-import 'package:twitter_clonex/blocs/get_post_bloc/get_post_bloc.dart';
+import 'package:twitter_clonex/blocs/post_bloc/post_bloc.dart';
+
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
 
-import 'package:twitter_clonex/blocs/sign_in_bloc/sign_in_bloc.dart';
-import 'package:twitter_clonex/blocs/sign_up_bloc/sign_up_bloc.dart';
+
 import 'package:twitter_clonex/blocs/update_bloc/update_user_info_bloc.dart';
 import 'package:twitter_clonex/mobile_layout.dart';
 import 'package:twitter_clonex/pages/auth_pages/login_page.dart';

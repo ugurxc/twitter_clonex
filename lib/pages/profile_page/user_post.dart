@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:twitter_clonex/blocs/bloc/post_bloc.dart';
+import 'package:twitter_clonex/blocs/post_bloc/post_bloc.dart';
 import 'package:twitter_clonex/components/constant.dart';
 import 'package:twitter_clonex/pages/full_screen_foto.dart';
 import 'package:user_repository/user_repository.dart';

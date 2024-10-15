@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:post_repository/post_repository.dart';
-import 'package:twitter_clonex/blocs/bloc/post_bloc.dart';
-import 'package:twitter_clonex/blocs/create_post_bloc/create_post_bloc.dart';
+import 'package:twitter_clonex/blocs/post_bloc/post_bloc.dart';
+
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
 
 import 'package:user_repository/user_repository.dart';

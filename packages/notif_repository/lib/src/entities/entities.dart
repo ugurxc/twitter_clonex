@@ -1,0 +1,1 @@
+export 'notif_entities.dart';

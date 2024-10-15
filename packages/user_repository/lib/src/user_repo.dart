@@ -28,4 +28,9 @@ Future<List<MyUser>> searchUsers(String query);
 Future<void> followUser(MyUser currentUser, MyUser targetUser);
 
 Future<void> unfollowUser(MyUser currentUser, MyUser targetUser);
+
+Future<List<MyUser>> getUsersByIds(List<String> userIds);
+
+
+
 }
