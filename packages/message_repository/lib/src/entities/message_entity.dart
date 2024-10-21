@@ -41,12 +41,14 @@ class PostEntities {
   }
 } */
 // Mesaj Entity
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class ChatMessageEntity extends Equatable {
   final String id;
   final String text;
   final String senderId; // Mesajı gönderenin ID'si
+  final String receiverId;
   final DateTime createdAt; // Mesajın gönderildiği zaman
 
   const ChatMessageEntity({
@@ -54,6 +56,8 @@ class ChatMessageEntity extends Equatable {
     required this.text,
     required this.senderId,
     required this.createdAt,
+    required this.receiverId,
+    
   });
 
   // Mesajı Firestore'a uygun bir dökümana çeviriyoruz.
@@ -62,6 +66,7 @@ class ChatMessageEntity extends Equatable {
       "id": id,
       "text": text,
       "senderId": senderId,
+      "receiverId": receiverId,
       "createdAt": createdAt.toIso8601String(), // Tarihi string olarak kaydediyoruz
     };
   }
@@ -72,10 +77,12 @@ class ChatMessageEntity extends Equatable {
       id: doc["id"] as String,
       text: doc["text"] as String,
       senderId: doc["senderId"] as String,
-      createdAt: DateTime.parse(doc["createdAt"] as String),
+      receiverId:doc["receiverId"] as String,
+      createdAt:DateTime.parse(doc["createdAt"] as String),
+      // DateTime.parse(doc["createdAt"] as String),
     );
   }
 
   @override
-  List<Object?> get props => [id, text, senderId, createdAt];
+  List<Object?> get props => [id, text, senderId, receiverId, createdAt];
 }

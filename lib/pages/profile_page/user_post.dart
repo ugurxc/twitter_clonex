@@ -23,8 +23,12 @@ class UserPost extends StatelessWidget {
           userPosts.sort((a, b) => b.creadetAt.compareTo(a.creadetAt));
           return ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            itemCount: userPosts.length,
+            itemCount: userPosts.length+1,
             itemBuilder: (BuildContext context, int index) {
+               if (index == userPosts.length) {
+                
+                return const SizedBox(height: 50);
+              }
               
               return Container(
                 decoration: const BoxDecoration(

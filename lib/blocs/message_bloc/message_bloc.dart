@@ -42,7 +42,7 @@ part 'message_state.dart';
 }
  */
 
-
+/* 
 class MessageBloc extends Bloc<MessageEvent, MessageState> {
   List<ChatMessage> currentMessages = []; 
   final FirebaseChatRepository _messageRepository;
@@ -86,3 +86,4 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     );
   }
 }
+ */

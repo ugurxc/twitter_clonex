@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:notif_repository/notif_repository.dart';
 import 'package:notif_repository/src/notif_repo.dart';
 import 'package:uuid/uuid.dart';
@@ -35,4 +36,12 @@ Stream<List<NotificationModel>> getNotifications(String userId) {
   }
 }
 
+
+
+final _firebaseMessaging =FirebaseMessaging.instance;
+Future<void> initNotifation() async{
+  await _firebaseMessaging.requestPermission();
+  final fCMToken = await _firebaseMessaging.getToken();
+  print("token: $fCMToken" );
+}
 }

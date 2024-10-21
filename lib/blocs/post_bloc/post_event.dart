@@ -13,3 +13,10 @@ class CreatePost extends PostEvent{
   
 }
 class GetPost extends PostEvent{}
+class UpdatePosts extends PostEvent {
+  final List<Post> posts;
+  const UpdatePosts(this.posts);
+
+  @override
+  List<Object> get props => [posts];
+}

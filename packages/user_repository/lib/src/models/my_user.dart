@@ -11,11 +11,12 @@ class MyUser extends Equatable {
    String? picture;
    List<String>? follower;
    List<String>? following;
+   String? fcmToken;
 
-   MyUser({required this.id, required this.email, required this.name,  this.picture , this.follower, this.following});
+   MyUser({required this.id, required this.email, required this.name,  this.picture , this.follower, this.following , this.fcmToken,});
 
 
-  static final  empty= MyUser(id: "", email: "", name: "", picture: "" , follower: const [] , following:  const []);
+  static final  empty= MyUser(id: "", email: "", name: "", picture: "" , follower: const [] , following:  const [] , fcmToken: null);
 
 
     MyUser copyWith({
@@ -25,6 +26,8 @@ class MyUser extends Equatable {
     String? picture,
     List<String>? follower,
     List<String>? following,
+    String? fcmToken, 
+    
 
   }) {
     return MyUser(
@@ -33,7 +36,8 @@ class MyUser extends Equatable {
       name: name ?? this.name,
       picture: picture ?? this.picture,
       follower: follower ?? this.follower,
-      following: following?? this.following
+      following: following?? this.following,
+      fcmToken: fcmToken??this.fcmToken
     );
   }
 
@@ -52,14 +56,15 @@ class MyUser extends Equatable {
       name:name,
       picture:picture,
       follower:follower,
-      following:following
+      following:following,
+      fcmToken: fcmToken, 
       
 
     );
   }
 
   static MyUser fromEntitiy(MyUserEntities entity){
-      return MyUser(id: entity.id, email: entity.email, name: entity.name, picture: entity.picture,follower:entity.follower,following:entity.following );
+      return MyUser(id: entity.id, email: entity.email, name: entity.name, picture: entity.picture,follower:entity.follower,following:entity.following, fcmToken: entity.fcmToken, );
   }
 
   void addFollower(String userId) {
@@ -84,7 +89,7 @@ bool isFollowing(MyUser currentUser, String targetUserId) {
 
   @override
 
-  List<Object?> get props => [id,email,name,picture,follower , following , ];
+  List<Object?> get props => [id,email,name,picture,follower , following , fcmToken];
 
 
 

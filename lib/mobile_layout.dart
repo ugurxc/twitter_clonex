@@ -15,6 +15,7 @@ import 'package:twitter_clonex/pages/create_twit_pages/create_twit_page.dart';
 
 import 'package:twitter_clonex/pages/home_page/home_screen.dart';
 import 'package:twitter_clonex/pages/message_page/message_screen.dart';
+import 'package:twitter_clonex/pages/message_page/message_widget/denemetest.dart';
 import 'package:twitter_clonex/pages/notifications_page/notifications_screen.dart';
 
 import 'package:twitter_clonex/pages/profile_page/my_profile_page.dart';
@@ -31,6 +32,7 @@ class MobileLayout extends StatefulWidget {
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
+  
   final PageController _pageController = PageController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var _currentIndex = 0;
@@ -128,9 +130,11 @@ class _MobileLayoutState extends State<MobileLayout> {
                     ListTile(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 30),
                       leading: const Icon(Icons.settings),
-                      title: const Text('Ayarlar'),
+                      title: const Text('deneme'),
                       onTap: () {
-                        // Ayarlar aksiyonu
+                       /* Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                         return const ChatScreen();
+                       },)); */
                       },
                     ),
                     ListTile(

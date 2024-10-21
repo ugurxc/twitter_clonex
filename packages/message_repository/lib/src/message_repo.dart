@@ -2,8 +2,8 @@ import 'models/message.dart';
 
 abstract class MessageRepository {
 
-  Future<void> sendMessage(ChatMessageModel message, String chatId);
+  Future<void> sendMessage(ChatMessageModel message, String senderUid , String receiverUid);
 
-  Stream<List<ChatMessageModel>> getMessages(String chatId);
+  Stream<List<ChatMessageModel>> getMessages(String senderUid ,String receiverUid);
 
 }

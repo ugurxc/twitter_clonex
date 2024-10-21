@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:twitter_clonex/pages/message_page/message_ui.dart';
+import 'package:twitter_clonex/pages/message_page/message_widget/denemetest.dart';
 
 import 'package:user_repository/user_repository.dart';
  // Kullanıcı veritabanı işlemleri
@@ -56,6 +57,7 @@ String getChatId(String userId1, String userId2) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Takip Edilenler'),
+        leading: const Text(""),
       ),
       body: BlocBuilder<MyUserBloc, MyUserState>(
         
@@ -98,11 +100,12 @@ String getChatId(String userId1, String userId2) {
                     onTap: () {
                       String currentUserId = user.uid; // assuming you have the current user's ID
                       String otherUserId = results[index].id;
+                      MyUser otherUser=results[index];
                       String chatId = getChatId(currentUserId, otherUserId);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return Basic(thisUser: results[index] , chatId: chatId,);
+                            return  ChatScreen(senderUid: currentUserId, receiverUid:otherUserId , otherUser: otherUser,);
                           },
                         ),
                       ); // Seçilen kullanıcı profiline gider

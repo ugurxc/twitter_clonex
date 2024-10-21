@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:notif_repository/notif_repository.dart';
 import 'package:twitter_clonex/blocs/auth_bloc/auth_bloc.dart';
 
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
@@ -11,10 +12,13 @@ import 'package:twitter_clonex/blocs/update_bloc/update_user_info_bloc.dart';
 import 'package:twitter_clonex/components/constant.dart';
 import 'package:twitter_clonex/pages/auth_pages/login_page.dart';
 import 'package:twitter_clonex/pages/full_screen_foto.dart';
+import 'package:twitter_clonex/pages/profile_page/my_profile_page.dart';
+import 'package:twitter_clonex/pages/profile_page/user_profile_page.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../../blocs/post_bloc/post_bloc.dart';
 
-class HomeScreen extends StatefulWidget {
+ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
@@ -22,9 +26,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
   @override
   Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser; // Kullanıcı bilgisi alınıyor
+    final notifation=FirebaseNotifRepository();
+    final userMyUser=FirebaseUserRepository();
+    final User? userCurrent = FirebaseAuth.instance.currentUser; // Kullanıcı bilgisi alınıyor
 
     return BlocListener<UpdateUserInfoBloc, UpdateUserInfoState>(
       listener: (context, state) {
@@ -59,8 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               ))
                           : Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(state.user!.picture!),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                                                
+                               return const MyProfilePage();
+                               
+                },));
+                                },
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(state.user!.picture!),
+                                ),
                               ),
                             );
                     }
@@ -94,7 +110,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 IconButton(onPressed: () {
                   setState(() {
-                    context.read<PostBloc>();
+                    notifation.initNotifation();
+                    userMyUser.getFCMToken(userCurrent!.uid);
                   });
                 }, icon: const Icon(Icons.restart_alt)),
                 const Center(child: Text("Takip edilenler")),
@@ -103,11 +120,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 /* user ==null? const Text("sıkınıt var "): ListTile(
                       title: Text(user.email!  )), */
                 Center(
-                  child: Text(user!.email!),
+                  child: Text(userCurrent!.email!),
                 ),
                 Expanded(
                   child: BlocBuilder<MyUserBloc, MyUserState>(
                     builder: (context, state) {
+     
                         if (state.status == MyUserStatus.loading) {
       return const Center(child: CircularProgressIndicator()); // Kullanıcı yüklenirken
     }
@@ -122,11 +140,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       return BlocBuilder<PostBloc, PostState>(
                         builder: (context, state) {
                           if (state is GetPostSuccess) {
-                            // Kullanıcı veya following listesi null ise işlemi durdur
-
+                            final List<String> userIds = [
+        ...context.read<MyUserBloc>().state.user!.following!, // Takip edilenler
+        user.id                    // Current user da dahil
+      ];
+                            
                             final userPosts = state.posts
                                 .where((post) =>
-                                    context.read<MyUserBloc>().state.user!.following!.contains(post.myUser.id))
+                                    userIds.contains(post.myUser.id))
                                 .toList();
 
                             userPosts.sort((a, b) => b.creadetAt.compareTo(a.creadetAt));
@@ -148,8 +169,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Row(
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          CircleAvatar(
-                                            backgroundImage: NetworkImage(userPosts[index].myUser.picture!),
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                                                
+                               return userPosts[index].myUser.id!=userCurrent.uid ? UserProfilePage(thisUser: userPosts[index].myUser) : const MyProfilePage();
+                               
+                },));
+                                            },
+                                            child: CircleAvatar(
+                                              backgroundImage: NetworkImage(userPosts[index].myUser.picture!),
+                                            ),
                                           ),
                                           const SizedBox(
                                             width: 10,
@@ -232,4 +262,4 @@ class _HomeScreenState extends State<HomeScreen> {
           )),
     );
   }
-}
+} 

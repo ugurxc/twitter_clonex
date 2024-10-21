@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:user_repository/src/entities/entities.dart';
 import 'package:user_repository/src/models/my_user.dart';
@@ -13,7 +14,7 @@ class FirebaseUserRepository implements UserRepository {
 
   final FirebaseAuth _firebaseAuth;
   final userCollection = FirebaseFirestore.instance.collection("user");
-
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   @override
   
   Stream<User?> get user {
@@ -22,14 +23,44 @@ class FirebaseUserRepository implements UserRepository {
       return user;
     });
   }
+  @override
+  Future<String?> getFCMToken(String id) async {
+    await _firebaseMessaging.requestPermission();
+  final fCMToken = await _firebaseMessaging.getToken();
+  print("token: $fCMToken" );
+   if (fCMToken != null) {
+      // FCM token'ı Firestore'daki kullanıcı dokümanına ekleniyor
+      await userCollection.doc(id).update({
+        'fcmToken': fCMToken,
+      });
+    }
+   return null;
 
-
+}
+  
   @override
   Future<MyUser> signUpWithEmailPassword(MyUser myUser, String password) async {
     try {
       UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(email: myUser.email, password: password);
 
       myUser = myUser.copyWith(id: user.user!.uid);
+
+            // FCM token'ını alıyoruz
+      
+
+      await userCollection.doc(myUser.id).set({
+        'id': myUser.id,
+        'email': myUser.email,
+        'name': myUser.name,
+        'picture': myUser.picture,
+        'follower': myUser.follower,
+        'following': myUser.following,
+          // FCM token'ı Firestore'a kaydediliyor
+      });
+          // FCM token alınıyor ve daha sonra güncelleniyor
+    
+   
+
       return myUser;
     } catch (e) {
       log(e.toString());
@@ -177,10 +208,10 @@ class FirebaseUserRepository implements UserRepository {
     }
   }
   
-}
+
   
  
-
+}
 
   //sign in
 
@@ -189,4 +220,3 @@ class FirebaseUserRepository implements UserRepository {
   //sign up
 
   //reset password
-

@@ -75,6 +75,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   BlocBuilder<MyUserBloc, MyUserState>(
                     builder: (context, state) {
                       final user = widget.thisUser;
+                      if (user==null) return const Placeholder();
                       return Positioned(
                         top: 130, // Mavi alanın içine yerleştiriyoruz
                         left: 10, // Ortalamak için
@@ -94,10 +95,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     width: 4,
                                   ),
                                   image: DecorationImage(
-                                    image: user?.picture == ""
+                                    image: user.picture == ""
                                         ? const NetworkImage(
                                             'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
-                                        : NetworkImage(user!.picture!), // Profil resmi URL'si
+                                        : NetworkImage(user.picture!), // Profil resmi URL'si
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -148,7 +149,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 flex: 15,
                 child: BlocBuilder<MyUserBloc, MyUserState>(
                   builder: (context, state) {
+                    
                     final user = widget.thisUser;
+                    if (user==null) return const Placeholder();
                     return Container(
                       padding: const EdgeInsets.only(left: 20),
                       width: MediaQuery.of(context).size.width,
@@ -156,11 +159,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            user?.name ?? "",
+                            user.name ?? "",
                             style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                           ),
                           Text(
-                            user?.email ?? "gur_2003@hotmail.com",
+                            user.email ?? "gur_2003@hotmail.com",
                             style: const TextStyle(color: Colors.grey),
                           ),
                           const SizedBox(
@@ -173,7 +176,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           Row(
                             children: [
                               Text(
-                                user!.followingCount.toString(),
+                                user.followingCount.toString(),
                                 style: const TextStyle(fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(

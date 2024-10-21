@@ -26,18 +26,20 @@ class FirebasePostRepository implements PostRepository {
       rethrow;
     }
   }
-
+  
   @override
-  Future<List<Post>> getPost() {
-    try {
-      return postCollection
-      .get()
-      .then((value) => value.docs.map((e) => 
-      Post.fromEntitiy(PostEntities.fromDocument(e.data())),).toList(),);
-      
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
+  Stream<List<Post>> getPost() {
+  try {
+    return postCollection
+      .snapshots() // Veritabanı değişikliklerini dinlemek için snapshots kullanıyoruz
+      .map((snapshot) => snapshot.docs.map((doc) => 
+        Post.fromEntitiy(PostEntities.fromDocument(doc.data()))).toList());
+  } catch (e) {
+    log(e.toString());
+    rethrow;
   }
+}
+
+
+
 }

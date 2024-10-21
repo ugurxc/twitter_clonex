@@ -31,6 +31,6 @@ Future<void> unfollowUser(MyUser currentUser, MyUser targetUser);
 
 Future<List<MyUser>> getUsersByIds(List<String> userIds);
 
-
+Future<String?> getFCMToken(String id);
 
 }

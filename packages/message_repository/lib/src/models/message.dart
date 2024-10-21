@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 /* import 'package:post_repository/message_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -78,6 +79,7 @@ class ChatMessageModel {
   final String id;
   final String text;
   final String senderId;
+  final String receiverId;
   final DateTime createdAt;
 
   ChatMessageModel({
@@ -85,14 +87,16 @@ class ChatMessageModel {
     required this.text,
     required this.senderId,
     required this.createdAt,
+    required this.receiverId
   });
 
   // Modeli Entity'ye çeviriyoruz
   ChatMessageEntity toEntity() {
     return ChatMessageEntity(
       id: id,
-      text: text,
+      text: text, 
       senderId: senderId,
+      receiverId: receiverId,
       createdAt: createdAt,
     );
   }
@@ -103,7 +107,10 @@ class ChatMessageModel {
       id: entity.id,
       text: entity.text,
       senderId: entity.senderId,
+      receiverId: entity.receiverId,
       createdAt: entity.createdAt,
     );
   }
+
+ 
 }
