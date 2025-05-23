@@ -31,11 +31,122 @@ import 'package:user_repository/user_repository.dart';
     );
   }
 }  */
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
-import 'package:twitter_clonex/pages/message_page/message_ui.dart';
+import 'package:twitter_clonex/pages/message_page/message_widget/denemetest.dart';
+import 'package:user_repository/user_repository.dart';
+
+class FollowingUsersPage extends StatelessWidget {
+  final UserRepository _userRepository = FirebaseUserRepository();
+
+  FollowingUsersPage({super.key});
+
+  String getChatId(String userId1, String userId2) {
+    return userId1.hashCode <= userId2.hashCode
+        ? '$userId1-$userId2'
+        : '$userId2-$userId1';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final User user = FirebaseAuth.instance.currentUser!;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Takip Edilenler'),
+        leading: const Text(""),
+      ),
+      body: BlocBuilder<MyUserBloc, MyUserState>(
+        builder: (context, userState) {
+          if (userState.status == MyUserStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final following = userState.user?.following ?? [];
+
+          if (following.isEmpty) {
+            return const Center(child: Text('Takip edilen kullanıcı yok'));
+          }
+
+          return FutureBuilder<List<MyUser>>(
+            future: _userRepository.getUsersByIds(following),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('Sonuç bulunamadı'));
+              }
+
+              final results = snapshot.data!;
+              return ListView.builder(
+                itemCount: results.length,
+                itemBuilder: (context, index) {
+                  final otherUserId = results[index].id;
+                  return StreamBuilder<MyUser>(
+                    stream: _userRepository.getUserStreamById(otherUserId),
+                    builder: (context, userSnapshot) {
+                      if (!userSnapshot.hasData) {
+                        return const SizedBox.shrink(); // Yüklenirken boş görünüm
+                      }
+
+                      final myUser = userSnapshot.data!;
+                      return ListTile(
+                        title: Text(myUser.name),
+                        subtitle: Text(myUser.email),
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          backgroundImage: myUser.picture != ""
+                              ? NetworkImage(myUser.picture!)
+                              : const NetworkImage(
+                                  'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
+                                ),
+                        ),
+                        trailing: myUser.isOnline
+                            ? Icon(Icons.circle, color: Colors.green)
+                            : Icon(Icons.circle, color: Colors.grey),
+                        onTap: () {
+                          String currentUserId = user.uid;
+                          String chatId = getChatId(currentUserId, otherUserId);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ChatScreen(
+                                  senderUid: currentUserId,
+                                  receiverUid: otherUserId,
+                                  otherUser: myUser,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+
+
+
+
+//-------------------------//
+/* import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
+
 import 'package:twitter_clonex/pages/message_page/message_widget/denemetest.dart';
 
 import 'package:user_repository/user_repository.dart';
@@ -97,6 +208,7 @@ String getChatId(String userId1, String userId2) {
                           ? NetworkImage(results[index].picture!)
                           : const NetworkImage('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'),
                     ),
+                    trailing: results[index].isOnline?  Icon(Icons.circle , color: Colors.green,) : Icon(Icons.circle , color: Colors.grey,),
                     onTap: () {
                       String currentUserId = user.uid; // assuming you have the current user's ID
                       String otherUserId = results[index].id;
@@ -120,3 +232,4 @@ String getChatId(String userId1, String userId2) {
     );
   }
 }
+ */

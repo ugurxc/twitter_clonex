@@ -49,7 +49,12 @@ class ChatMessageEntity extends Equatable {
   final String text;
   final String senderId; // Mesajı gönderenin ID'si
   final String receiverId;
-  final DateTime createdAt; // Mesajın gönderildiği zaman
+  final DateTime createdAt;
+  final bool isNotificationSent;
+  final bool isSeen; 
+  final String? picture;
+  final String? idDoc;
+  final String? audio; // Mesajın gönderildiği zaman
 
   const ChatMessageEntity({
     required this.id,
@@ -57,6 +62,11 @@ class ChatMessageEntity extends Equatable {
     required this.senderId,
     required this.createdAt,
     required this.receiverId,
+    this.isNotificationSent = false,
+    this.isSeen=false,
+    required this.picture,
+    required this.idDoc,
+    required this.audio
     
   });
 
@@ -67,7 +77,12 @@ class ChatMessageEntity extends Equatable {
       "text": text,
       "senderId": senderId,
       "receiverId": receiverId,
-      "createdAt": createdAt.toIso8601String(), // Tarihi string olarak kaydediyoruz
+      "createdAt": createdAt.toIso8601String(),
+      "isNotificationSent": isNotificationSent,
+      "isSeen":isSeen, // Tarihi string olarak kaydediyoruz
+      "picture":picture,
+      "idDoc":idDoc,
+      "audio":audio
     };
   }
 
@@ -79,10 +94,15 @@ class ChatMessageEntity extends Equatable {
       senderId: doc["senderId"] as String,
       receiverId:doc["receiverId"] as String,
       createdAt:DateTime.parse(doc["createdAt"] as String),
-      // DateTime.parse(doc["createdAt"] as String),
+       isNotificationSent: doc["isNotificationSent"] as bool? ?? false,
+       isSeen:doc["isSeen"] as bool? ?? false,
+       picture:doc["picture"] as String?,
+       idDoc:doc["idDoc"] as String? ??"",
+       audio:doc["audio"] as String?
+      
     );
   }
 
   @override
-  List<Object?> get props => [id, text, senderId, receiverId, createdAt];
+  List<Object?> get props => [id, text, senderId, receiverId, createdAt, isNotificationSent , isSeen, picture,idDoc , audio];
 }

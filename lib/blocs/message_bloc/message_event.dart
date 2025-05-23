@@ -1,4 +1,4 @@
-part of 'message_bloc.dart';
+/* part of 'message_bloc.dart';
 
 abstract class MessageEvent extends Equatable {
   const MessageEvent();
@@ -17,4 +17,4 @@ class LoadMessages extends MessageEvent {
   final String chatId;
 
   const LoadMessages(this.chatId);
-}
+} */

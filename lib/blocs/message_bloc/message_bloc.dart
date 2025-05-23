@@ -1,10 +1,4 @@
-import 'package:bloc/bloc.dart';
-import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:equatable/equatable.dart';
-import 'package:message_repository/message_repository.dart';
 
-part 'message_event.dart';
-part 'message_state.dart';
 
 /* class MessageBloc extends Bloc<MessageEvent, MessageState> {
   final FirebaseChatRepository _messageRepository;

@@ -1,4 +1,4 @@
-part of 'message_bloc.dart';
+/* part of 'message_bloc.dart';
 
 abstract class MessageState extends Equatable {
   const MessageState();
@@ -13,16 +13,7 @@ class MessageInitial extends MessageState {}
 
 class LoadMessagesLoading extends MessageState {}
 
-class LoadMessagesSuccess extends MessageState {
-  final List<ChatMessage> messages;
-
-  const LoadMessagesSuccess(this.messages);
-
-  @override
-  List<Object> get props => [messages];
-}
-
-class LoadMessagesFailure extends MessageState {}
+essagesFailure extends MessageState {}
 
 class SendMessageLoading extends MessageState {}
 
@@ -35,4 +26,4 @@ class SendMessageSuccess extends MessageState {
   List<Object> get props => [message];
 }
 
-class SendMessageFailure extends MessageState {}
+class SendMessageFailure extends MessageState {} */

@@ -208,10 +208,24 @@ class FirebaseUserRepository implements UserRepository {
     }
   }
   
+  @override
+  Stream<MyUser> getUserStreamById(String userId) {
+         return userCollection.doc(userId).snapshots().map((snapshot) {
+    if (snapshot.exists && snapshot.data() != null) {
+      final userEntity = MyUserEntities.fromDocument(snapshot.data()!);
+      return MyUser.fromEntitiy(userEntity);
+    } else {
+      throw Exception("Kullanıcı bulunamadı veya veri hatası oluştu");
+    }
+  });
+}
+    
+  }
+  
 
   
  
-}
+
 
   //sign in
 

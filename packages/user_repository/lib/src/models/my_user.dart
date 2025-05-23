@@ -12,11 +12,12 @@ class MyUser extends Equatable {
    List<String>? follower;
    List<String>? following;
    String? fcmToken;
+   bool isOnline; 
 
-   MyUser({required this.id, required this.email, required this.name,  this.picture , this.follower, this.following , this.fcmToken,});
+   MyUser({required this.id, required this.email, required this.name,  this.picture , this.follower, this.following , this.fcmToken,this.isOnline = false,});
 
 
-  static final  empty= MyUser(id: "", email: "", name: "", picture: "" , follower: const [] , following:  const [] , fcmToken: null);
+  static final  empty= MyUser(id: "", email: "", name: "", picture: "" , follower: const [] , following:  const [] , fcmToken: null , isOnline: false,);
 
 
     MyUser copyWith({
@@ -27,6 +28,7 @@ class MyUser extends Equatable {
     List<String>? follower,
     List<String>? following,
     String? fcmToken, 
+    bool? isOnline,
     
 
   }) {
@@ -37,7 +39,8 @@ class MyUser extends Equatable {
       picture: picture ?? this.picture,
       follower: follower ?? this.follower,
       following: following?? this.following,
-      fcmToken: fcmToken??this.fcmToken
+      fcmToken: fcmToken??this.fcmToken,
+      isOnline: isOnline ?? this.isOnline,
     );
   }
 
@@ -58,13 +61,14 @@ class MyUser extends Equatable {
       follower:follower,
       following:following,
       fcmToken: fcmToken, 
+      isOnline: isOnline,
       
 
     );
   }
 
   static MyUser fromEntitiy(MyUserEntities entity){
-      return MyUser(id: entity.id, email: entity.email, name: entity.name, picture: entity.picture,follower:entity.follower,following:entity.following, fcmToken: entity.fcmToken, );
+      return MyUser(id: entity.id, email: entity.email, name: entity.name, picture: entity.picture,follower:entity.follower,following:entity.following, fcmToken: entity.fcmToken, isOnline: entity.isOnline,);
   }
 
   void addFollower(String userId) {
@@ -89,7 +93,7 @@ bool isFollowing(MyUser currentUser, String targetUserId) {
 
   @override
 
-  List<Object?> get props => [id,email,name,picture,follower , following , fcmToken];
+  List<Object?> get props => [id,email,name,picture,follower , following , fcmToken , isOnline];
 
 
 

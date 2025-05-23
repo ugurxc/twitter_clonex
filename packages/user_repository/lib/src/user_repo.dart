@@ -33,4 +33,6 @@ Future<List<MyUser>> getUsersByIds(List<String> userIds);
 
 Future<String?> getFCMToken(String id);
 
+Stream<MyUser> getUserStreamById(String userId);
+
 }

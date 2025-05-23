@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,12 +11,13 @@ import 'package:twitter_clonex/blocs/post_bloc/post_bloc.dart';
 
 import 'package:twitter_clonex/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:twitter_clonex/pages/create_twit_pages/create_twit_page.dart';
+import 'package:twitter_clonex/pages/create_twit_pages/testting.dart';
 
 
 
 import 'package:twitter_clonex/pages/home_page/home_screen.dart';
 import 'package:twitter_clonex/pages/message_page/message_screen.dart';
-import 'package:twitter_clonex/pages/message_page/message_widget/denemetest.dart';
+
 import 'package:twitter_clonex/pages/notifications_page/notifications_screen.dart';
 
 import 'package:twitter_clonex/pages/profile_page/my_profile_page.dart';
@@ -31,8 +33,31 @@ class MobileLayout extends StatefulWidget {
   State<MobileLayout> createState() => _MobileLayoutState();
 }
 
-class _MobileLayoutState extends State<MobileLayout> {
+class _MobileLayoutState extends State<MobileLayout> with WidgetsBindingObserver {
   
+/*    @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    setStatus(true);
+  }
+  void setStatus(bool status) async{
+      await FirebaseFirestore.instance
+        .collection("user")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({"isOnline":status});
+        }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state==AppLifecycleState.resumed){
+      setStatus(true);
+    }
+    else{
+      setStatus(false);
+    }
+    
+  }  */
+
   final PageController _pageController = PageController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var _currentIndex = 0;
@@ -132,9 +157,9 @@ class _MobileLayoutState extends State<MobileLayout> {
                       leading: const Icon(Icons.settings),
                       title: const Text('deneme'),
                       onTap: () {
-                       /* Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                         return const ChatScreen();
-                       },)); */
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                         return const HomePage();
+                       },)); 
                       },
                     ),
                     ListTile(

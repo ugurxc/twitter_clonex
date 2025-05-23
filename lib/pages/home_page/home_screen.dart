@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,8 +26,29 @@ import '../../blocs/post_bloc/post_bloc.dart';
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+     @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    setStatus(true);
+  }
+  void setStatus(bool status) async{
+      await FirebaseFirestore.instance
+        .collection("user")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({"isOnline":status});
+        }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state==AppLifecycleState.resumed){
+      setStatus(true);
+    }
+    else{
+      setStatus(false);
+    }
+    
+  } 
   @override
   Widget build(BuildContext context) {
     final notifation=FirebaseNotifRepository();
@@ -94,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           context.read<AuthBloc>().add(const SignOutRequired());
                           context.read<MyUserBloc>().add(LogoutUser());
+                          setStatus(false);
                         },
                         icon: const Icon(Icons.exit_to_app_rounded)),
                   )

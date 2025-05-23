@@ -43,6 +43,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
     return Container(
        constraints: const BoxConstraints(maxHeight: 200),
       child: TextFormField(
+        
         expands: false,
         maxLines: null,
         minLines: 1,
@@ -72,7 +73,7 @@ class _MessageTextFieldState extends State<MessageTextField> {
           floatingLabelStyle: const TextStyle(color:Colors.blue),
           suffixIcon: widget.suffixIcon,
           prefixIcon: SizedBox(
-        width: 80, // İki ikonun sığabileceği genişlik
+        width: 100, // İki ikonun sığabileceği genişlik
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

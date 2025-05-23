@@ -81,13 +81,24 @@ class ChatMessageModel {
   final String senderId;
   final String receiverId;
   final DateTime createdAt;
+  final bool isNotificationSent;
+  final bool isSeen;
+    String? idDoc;
+   String? picture;
+   String? audio;
+
 
   ChatMessageModel({
     required this.id,
     required this.text,
     required this.senderId,
     required this.createdAt,
-    required this.receiverId
+    required this.receiverId,
+    this.isNotificationSent = false,
+    this.isSeen=false,
+    this.picture,
+    this.idDoc,
+    this.audio
   });
 
   // Modeli Entity'ye çeviriyoruz
@@ -98,6 +109,12 @@ class ChatMessageModel {
       senderId: senderId,
       receiverId: receiverId,
       createdAt: createdAt,
+      isNotificationSent: isNotificationSent,
+      isSeen: isSeen,
+      picture:picture,
+      idDoc:idDoc,
+      audio:audio
+      
     );
   }
 
@@ -109,6 +126,11 @@ class ChatMessageModel {
       senderId: entity.senderId,
       receiverId: entity.receiverId,
       createdAt: entity.createdAt,
+      isNotificationSent: entity.isNotificationSent,
+      isSeen: entity.isSeen,
+      picture: entity.picture,
+      idDoc:entity.idDoc,
+      audio: entity.audio
     );
   }
 
