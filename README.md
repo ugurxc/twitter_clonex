@@ -15,17 +15,16 @@ A full-featured social media app built with Flutter, replicating core Twitter fu
 
 ## 📱 Screenshots
 
-<div style="overflow-x: auto; white-space: nowrap;">
-  <img src="asset/images/one.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/two.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/three.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/four.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/five.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/six.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/seven.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/eight.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/nine.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/ten.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-<img src="asset/images/eleven.jpeg" width="250" style="display: inline-block; margin-right: 10px;" />
-
-</div>
+<p align="center">
+  <img src="asset/images/one.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/two.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/three.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/four.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/five.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/six.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/seven.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/eight.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/nine.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/ten.jpeg" width="200" style="margin: 10px;" />
+  <img src="asset/images/eleven.jpeg" width="200" style="margin: 10px;" />
+</p>
