@@ -5,7 +5,7 @@ class PostEntities {
   final String postId;
   final String post;
   final DateTime creadetAt;
-  final MyUser myUser;
+  final MyUser myUser; //dsdsd
   final String? postPic;
 
   const PostEntities({required this.postId, required this.post, required this.creadetAt, required this.myUser , required this.postPic});

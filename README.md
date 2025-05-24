@@ -39,4 +39,4 @@ To run this project locally, you need to set up Firebase:
    - **Cloud Firestore**
    - **Cloud Storage**
 3. Download the `google-services.json` file from the Firebase console.
-4. Place it in your project directory at:
+4. Place it in your project directory at: android/app/google-services.json
