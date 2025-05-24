@@ -28,3 +28,15 @@ A full-featured social media app built with Flutter, replicating core Twitter fu
   <img src="asset/images/ten.jpeg" width="200" style="margin: 10px;" />
   <img src="asset/images/eleven.jpeg" width="200" style="margin: 10px;" />
 </p>
+
+## ⚙️ Firebase Setup
+
+To run this project locally, you need to set up Firebase:
+
+1. Go to [Firebase Console](https://console.firebase.google.com) and create a new project.
+2. Enable the following services:
+   - **Authentication**
+   - **Cloud Firestore**
+   - **Cloud Storage**
+3. Download the `google-services.json` file from the Firebase console.
+4. Place it in your project directory at:
